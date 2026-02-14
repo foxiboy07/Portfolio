@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AQIB KHAN | Full Stack • Software • Marketing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Space+Grotesk:wght@500;600;700&display=swap');
+        
+        :root {
+            --neon-cyan: #22d3ee;
+            --neon-purple: #c026d3;
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        
+        .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .hero-bg {
+            background: radial-gradient(circle at center, rgba(34, 211, 238, 0.08) 0%, transparent 70%);
+        }
+
+        .neon-text {
+            text-shadow: 
+                0 0 10px #22d3ee,
+                0 0 20px #22d3ee,
+                0 0 40px #c026d3;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .project-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-20px) scale(1.02);
+            box-shadow: 0 0 60px -15px rgb(192, 38, 211);
+        }
+
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: linear-gradient(to right, #22d3ee, #c026d3);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(to right, #22d3ee, #c026d3);
+            z-index: 50;
+            transition: width 0.1s;
+        }
+
+        canvas {
+            filter: contrast(1.2) brightness(1.1);
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-white overflow-x-hidden">
+
+    <!-- Scroll Progress -->
+    <div id="scrollProgress" class="scroll-progress w-0"></div>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 glass border-b border-white/10 transition-all duration-500">
+        <div class="max-w-screen-2xl mx-auto px-8 py-6 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center text-xl font-bold heading-font">AK</div>
+                <div>
+                    <span class="text-2xl font-bold tracking-tighter heading-font">AQIB</span>
+                    <span class="text-2xl font-light tracking-tighter text-zinc-400">KHAN</span>
+                </div>
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center gap-10 text-sm font-medium">
+                <a href="#about" class="nav-link">About</a>
+                <a href="#skills" class="nav-link">Skills</a>
+                <a href="#work" class="nav-link">Work</a>
+                <a href="#services" class="nav-link">Services</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="#contact" 
+                   class="px-8 py-3.5 text-sm font-semibold rounded-2xl border border-white/20 hover:border-cyan-400 transition-all hover:scale-105">
+                    LET'S TALK
+                </a>
+                
+                <!-- Mobile Hamburger -->
+                <button id="hamburger" class="md:hidden w-11 h-11 flex items-center justify-center">
+                    <div class="space-y-1.5">
+                        <span id="bar1" class="block w-6 h-0.5 bg-white transition-all"></span>
+                        <span id="bar2" class="block w-6 h-0.5 bg-white transition-all"></span>
+                        <span id="bar3" class="block w-6 h-0.5 bg-white transition-all"></span>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden fixed inset-0 bg-zinc-950 z-40 pt-24">
+            <div class="flex flex-col items-center gap-8 text-2xl font-medium">
+                <a href="#about" class="mobile-link">About</a>
+                <a href="#skills" class="mobile-link">Skills</a>
+                <a href="#work" class="mobile-link">Work</a>
+                <a href="#services" class="mobile-link">Services</a>
+                <a href="#contact" class="mobile-link">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <!-- Cinematic Particle Canvas -->
+        <canvas id="particles" class="absolute inset-0 z-0"></canvas>
+        
+        <!-- Gradient Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-zinc-950/70 to-zinc-950 z-10"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(at_center,#000000_30%,transparent_80%)] z-10"></div>
+
+        <div class="relative z-20 max-w-screen-2xl mx-auto px-6 text-center">
+            <!-- Pre title -->
+            <div data-aos="fade-down" data-aos-delay="200" 
+                 class="inline-flex items-center gap-3 px-6 py-2 rounded-3xl border border-white/10 bg-white/5 mb-8">
+                <div class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                <span class="uppercase text-xs tracking-[3px] font-medium text-cyan-400">Available for 2026 projects</span>
+            </div>
+
+            <!-- Main Heading -->
+            <h1 id="heroName" 
+                class="heading-font text-[14vw] md:text-[9.5vw] lg:text-[120px] leading-[0.85] font-black tracking-[-4px] neon-text mb-4">
+                AQIB KHAN
+            </h1>
+
+            <!-- Typing Subtitle -->
+            <div class="h-20 flex items-center justify-center">
+                <p id="typing" 
+                   class="text-2xl md:text-4xl font-light text-zinc-300 tracking-wide"></p>
+            </div>
+
+            <!-- Buttons -->
+            <div data-aos="fade-up" data-aos-delay="800" class="flex flex-col sm:flex-row gap-4 justify-center mt-16">
+                <a href="#work" 
+                   class="group px-10 py-6 bg-white text-zinc-950 font-semibold text-lg rounded-3xl flex items-center justify-center gap-3 hover:scale-105 transition-all">
+                    VIEW SELECTED WORK
+                    <span class="text-2xl group-hover:rotate-45 transition">→</span>
+                </a>
+                
+                <a href="#contact" 
+                   class="px-10 py-6 border border-white/30 hover:border-white/70 font-medium text-lg rounded-3xl transition-all">
+                    START A PROJECT
+                </a>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 text-xs tracking-widest">
+                <div class="w-px h-16 bg-gradient-to-b from-transparent via-white/40 to-transparent"></div>
+                <span class="text-zinc-500">SCROLL TO EXPLORE</span>
+            </div>
+        </div>
+
+        <!-- Bottom fade -->
+        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-zinc-950 to-transparent z-20"></div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="py-32 relative">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            <div class="grid lg:grid-cols-12 gap-20 items-center">
+                <!-- Left Image -->
+                <div class="lg:col-span-5" data-aos="fade-right">
+                    <div class="relative">
+                        <div class="aspect-square rounded-3xl overflow-hidden border border-white/10">
+                            <img src="https://picsum.photos/id/1015/1200/1200" 
+                                 alt="Aqib Khan"
+                                 class="w-full h-full object-cover transition-all duration-700 hover:scale-110">
+                        </div>
+                        <!-- Floating badge -->
+                        <div class="absolute -bottom-6 -right-6 glass px-8 py-6 rounded-3xl">
+                            <div class="flex items-center gap-4">
+                                <div class="text-5xl">🇵🇰</div>
+                                <div>
+                                    <div class="text-sm text-zinc-400">Based in</div>
+                                    <div class="font-semibold text-xl">Pakistan</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Content -->
+                <div class="lg:col-span-7" data-aos="fade-left">
+                    <div class="max-w-2xl">
+                        <div class="uppercase text-cyan-400 text-sm tracking-[4px] mb-6">CHAPTER 01 — THE STORY</div>
+                        <h2 class="text-6xl md:text-7xl heading-font font-bold leading-none mb-10">
+                            I turn ideas into<br>cinematic digital realities.
+                        </h2>
+                        
+                        <div class="prose prose-invert text-xl text-zinc-400 leading-relaxed">
+                            <p>I'm a full-stack engineer and the founder of a performance-driven marketing agency. With 6+ years of building scalable web applications and executing multi-million dollar campaigns, I fuse code, design, and growth strategy into unforgettable digital experiences.</p>
+                            <p>From high-performance SaaS platforms to viral marketing campaigns, I architect solutions that don't just work — they captivate.</p>
+                        </div>
+
+                        <div class="mt-16 flex flex-wrap gap-8">
+                            <div>
+                                <div class="text-5xl font-bold text-cyan-400">60+</div>
+                                <div class="text-sm text-zinc-400">Projects delivered</div>
+                            </div>
+                            <div>
+                                <div class="text-5xl font-bold text-purple-400">12</div>
+                                <div class="text-sm text-zinc-400">Countries reached</div>
+                            </div>
+                            <div>
+                                <div class="text-5xl font-bold text-amber-400">4.9</div>
+                                <div class="text-sm text-zinc-400">Client rating</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="py-32 bg-zinc-900">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            <div class="flex justify-between items-end mb-16">
+                <div>
+                    <div class="uppercase text-xs tracking-[3px] text-purple-400">CHAPTER 02 — EXPERTISE</div>
+                    <h2 class="text-6xl heading-font font-bold">What I master</h2>
+                </div>
+                <a href="#" class="text-sm flex items-center gap-2 group">
+                    DOWNLOAD CV 
+                    <span class="text-xl group-hover:translate-x-2 transition">→</span>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <!-- Skill Card -->
+                <div data-aos="fade-up" class="glass p-8 rounded-3xl group">
+                    <div class="text-cyan-400 text-5xl mb-8">⚡</div>
+                    <h3 class="text-2xl font-semibold mb-3">Full Stack Development</h3>
+                    <p class="text-zinc-400">Next.js • React • Node.js • TypeScript • Python • Go</p>
+                    <div class="h-1 bg-zinc-800 rounded mt-8 overflow-hidden">
+                        <div class="h-full w-[95%] bg-gradient-to-r from-cyan-400 to-purple-500"></div>
+                    </div>
+                </div>
+
+                <div data-aos="fade-up" data-aos-delay="100" class="glass p-8 rounded-3xl group">
+                    <div class="text-purple-400 text-5xl mb-8">📱</div>
+                    <h3 class="text-2xl font-semibold mb-3">Mobile &amp; Cloud</h3>
+                    <p class="text-zinc-400">React Native • Flutter • AWS • Firebase • Docker • Kubernetes</p>
+                    <div class="h-1 bg-zinc-800 rounded mt-8 overflow-hidden">
+                        <div class="h-full w-[88%] bg-gradient-to-r from-cyan-400 to-purple-500"></div>
+                    </div>
+                </div>
+
+                <div data-aos="fade-up" data-aos-delay="200" class="glass p-8 rounded-3xl group">
+                    <div class="text-amber-400 text-5xl mb-8">🎨</div>
+                    <h3 class="text-2xl font-semibold mb-3">UI/UX &amp; Motion</h3>
+                    <p class="text-zinc-400">Figma • Framer Motion • GSAP • Three.js • WebGL</p>
+                    <div class="h-1 bg-zinc-800 rounded mt-8 overflow-hidden">
+                        <div class="h-full w-[92%] bg-gradient-to-r from-cyan-400 to-purple-500"></div>
+                    </div>
+                </div>
+
+                <div data-aos="fade-up" data-aos-delay="300" class="glass p-8 rounded-3xl group">
+                    <div class="text-pink-400 text-5xl mb-8">📈</div>
+                    <h3 class="text-2xl font-semibold mb-3">Growth Marketing</h3>
+                    <p class="text-zinc-400">Meta Ads • Google Ads • SEO • Analytics • Automation</p>
+                    <div class="h-1 bg-zinc-800 rounded mt-8 overflow-hidden">
+                        <div class="h-full w-[90%] bg-gradient-to-r from-cyan-400 to-purple-500"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WORK / PROJECTS -->
+    <section id="work" class="py-32">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            <div class="flex justify-between items-end mb-16">
+                <div>
+                    <div class="uppercase text-xs tracking-[3px] text-cyan-400">CHAPTER 03 — SELECTED WORK</div>
+                    <h2 class="text-6xl heading-font font-bold">Projects that made an impact</h2>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Project 1 -->
+                <div data-aos="fade-up" class="project-card group relative overflow-hidden rounded-3xl aspect-video bg-zinc-900">
+                    <img src="https://picsum.photos/id/201/1200/800" 
+                         class="absolute inset-0 w-full h-full object-cover transition-all group-hover:scale-110 duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+                    
+                    <div class="absolute bottom-0 p-10">
+                        <div class="flex gap-3 mb-4">
+                            <span class="px-4 py-1 text-xs bg-white/10 backdrop-blur rounded-full">Next.js</span>
+                            <span class="px-4 py-1 text-xs bg-white/10 backdrop-blur rounded-full">Stripe</span>
+                        </div>
+                        <h3 class="text-4xl font-semibold mb-2">NEXUS — Fintech SaaS</h3>
+                        <p class="text-zinc-400 max-w-xs">Built a $12M ARR platform used by 40k+ businesses.</p>
+                    </div>
+                    
+                    <div class="absolute top-8 right-8 px-5 py-2 bg-white text-zinc-950 text-sm font-medium rounded-2xl flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
+                        View Case Study →
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div data-aos="fade-up" data-aos-delay="150" class="project-card group relative overflow-hidden rounded-3xl aspect-video bg-zinc-900">
+                    <img src="https://picsum.photos/id/237/1200/800" 
+                         class="absolute inset-0 w-full h-full object-cover transition-all group-hover:scale-110 duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+                    
+                    <div class="absolute bottom-0 p-10">
+                        <div class="flex gap-3 mb-4">
+                            <span class="px-4 py-1 text-xs bg-white/10 backdrop-blur rounded-full">React Native</span>
+                            <span class="px-4 py-1 text-xs bg-white/10 backdrop-blur rounded-full">AI</span>
+                        </div>
+                        <h3 class="text-4xl font-semibold mb-2">LUMINA — AI Content Studio</h3>
+                        <p class="text-zinc-400 max-w-xs">Viral marketing tool used by 200+ agencies worldwide.</p>
+                    </div>
+                    
+                    <div class="absolute top-8 right-8 px-5 py-2 bg-white text-zinc-950 text-sm font-medium rounded-2xl flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
+                        View Case Study →
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" class="py-32 bg-zinc-900">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            <div class="text-center mb-20">
+                <div class="uppercase tracking-[4px] text-purple-400 text-sm mb-4">CHAPTER 04 — WHAT I OFFER</div>
+                <h2 class="text-6xl heading-font font-bold max-w-2xl mx-auto">From code to campaigns — I deliver end-to-end.</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div data-aos="zoom-in" class="glass p-10 rounded-3xl">
+                    <div class="text-6xl mb-8">💻</div>
+                    <h3 class="text-3xl font-semibold mb-6">Full Stack Development</h3>
+                    <ul class="space-y-4 text-zinc-400">
+                        <li class="flex items-start gap-3"><span class="text-cyan-400 mt-1">→</span> Custom web applications</li>
+                        <li class="flex items-start gap-3"><span class="text-cyan-400 mt-1">→</span> Scalable SaaS platforms</li>
+                        <li class="flex items-start gap-3"><span class="text-cyan-400 mt-1">→</span> API &amp; backend systems</li>
+                    </ul>
+                </div>
+                
+                <div data-aos="zoom-in" data-aos-delay="100" class="glass p-10 rounded-3xl">
+                    <div class="text-6xl mb-8">📣</div>
+                    <h3 class="text-3xl font-semibold mb-6">Marketing Agency Services</h3>
+                    <ul class="space-y-4 text-zinc-400">
+                        <li class="flex items-start gap-3"><span class="text-purple-400 mt-1">→</span> Performance campaigns</li>
+                        <li class="flex items-start gap-3"><span class="text-purple-400 mt-1">→</span> Brand strategy &amp; visuals</li>
+                        <li class="flex items-start gap-3"><span class="text-purple-400 mt-1">→</span> SEO &amp; content systems</li>
+                    </ul>
+                </div>
+                
+                <div data-aos="zoom-in" data-aos-delay="200" class="glass p-10 rounded-3xl">
+                    <div class="text-6xl mb-8">🚀</div>
+                    <h3 class="text-3xl font-semibold mb-6">Software Products</h3>
+                    <ul class="space-y-4 text-zinc-400">
+                        <li class="flex items-start gap-3"><span class="text-amber-400 mt-1">→</span> AI-powered tools</li>
+                        <li class="flex items-start gap-3"><span class="text-amber-400 mt-1">→</span> Internal automation</li>
+                        <li class="flex items-start gap-3"><span class="text-amber-400 mt-1">→</span> MVP to production</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="py-32 relative">
+        <div class="max-w-screen-2xl mx-auto px-8">
+            <div class="grid lg:grid-cols-2 gap-20">
+                <div data-aos="fade-right">
+                    <div class="text-6xl heading-font font-bold leading-none mb-8">
+                        Let's create<br>something legendary.
+                    </div>
+                    <p class="text-2xl text-zinc-400 max-w-md">
+                        Currently accepting 2 new projects for 2026.
+                    </p>
+                    
+                    <div class="mt-20 space-y-8">
+                        <a href="mailto:hello@aqibkhan.dev" class="block group">
+                            <div class="text-sm text-zinc-400">EMAIL</div>
+                            <div class="text-3xl font-medium group-hover:text-cyan-400 transition">hello@aqibkhan.dev</div>
+                        </a>
+                        <div>
+                            <div class="text-sm text-zinc-400">LOCATION</div>
+                            <div class="text-3xl font-medium">Karachi, Pakistan (GMT+5)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div data-aos="fade-left" class="glass p-12 rounded-3xl">
+                    <form class="space-y-8">
+                        <div>
+                            <label class="text-xs uppercase tracking-widest text-zinc-400 block mb-2">Your name</label>
+                            <input type="text" 
+                                   class="w-full bg-transparent border-b border-white/30 focus:border-cyan-400 outline-none pb-4 text-xl placeholder:text-zinc-600"
+                                   placeholder="Alex Rivera">
+                        </div>
+                        <div>
+                            <label class="text-xs uppercase tracking-widest text-zinc-400 block mb-2">Project type</label>
+                            <select class="w-full bg-transparent border-b border-white/30 focus:border-cyan-400 outline-none pb-4 text-xl">
+                                <option value="">Select one...</option>
+                                <option>Web Application</option>
+                                <option>Marketing Campaign</option>
+                                <option>Mobile App</option>
+                                <option>AI Product</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs uppercase tracking-widest text-zinc-400 block mb-2">Message</label>
+                            <textarea rows="4"
+                                      class="w-full bg-transparent border-b border-white/30 focus:border-cyan-400 outline-none pb-4 text-xl placeholder:text-zinc-600 resize-none"
+                                      placeholder="Tell me about your vision..."></textarea>
+                        </div>
+                        
+                        <button type="button"
+                                class="w-full py-7 bg-white text-black font-semibold text-xl rounded-3xl hover:bg-gradient-to-r hover:from-cyan-400 hover:to-purple-500 hover:text-white transition-all">
+                            SEND MESSAGE
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/10 py-20">
+        <div class="max-w-screen-2xl mx-auto px-8 text-center">
+            <div class="flex justify-center gap-8 text-3xl mb-12">
+                <a href="#" class="hover:text-cyan-400 transition">𝕏</a>
+                <a href="#" class="hover:text-cyan-400 transition">𝕚</a>
+                <a href="#" class="hover:text-cyan-400 transition">𝕃</a>
+                <a href="#" class="hover:text-cyan-400 transition">𝔹</a>
+            </div>
+            <p class="text-zinc-500">© 2026 Aqib Khan. Built with cinematic obsession.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Tailwind script already loaded via CDN
+        
+        // AOS Init
+        AOS.init({
+            duration: 1200,
+            once: true,
+            easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+        });
+
+        // Typing Effect
+        const phrases = [
+            "Full Stack Engineer",
+            "Software Architect",
+            "Marketing Technologist",
+            "Founder & Creator"
+        ];
+        let currentPhrase = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typingElement = document.getElementById('typing');
+
+        function type() {
+            const current = phrases[currentPhrase];
+            
+            if (isDeleting) {
+                typingElement.textContent = current.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingElement.textContent = current.substring(0, charIndex + 1);
+                charIndex++;
+            }
+            
+            let speed = isDeleting ? 40 : 70;
+            
+            if (!isDeleting && charIndex === current.length) {
+                speed = 1800;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                currentPhrase = (currentPhrase + 1) % phrases.length;
+                speed = 400;
+            }
+            
+            setTimeout(type, speed);
+        }
+        
+        // Start typing after load
+        setTimeout(() => {
+            type();
+        }, 1800);
+
+        // Particle System
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: 0, y: 0, radius: 180 };
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3.5 + 0.8;
+                this.speedX = Math.random() * 0.8 - 0.4;
+                this.speedY = Math.random() * 0.8 - 0.4;
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                // Gentle mouse attraction
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < mouse.radius) {
+                    this.speedX += dx / 120;
+                    this.speedY += dy / 120;
+                }
+                
+                // Bounce off edges
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            
+            draw() {
+                ctx.fillStyle = '#67e8f9';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const numberOfParticles = Math.floor((canvas.width * canvas.height) / 8000);
+            for (let i = 0; i < numberOfParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function connectParticles() {
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a; b < particles.length; b++) {
+                    const dx = particles[a].x - particles[b].x;
+                    const dy = particles[a].y - particles[b].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 140) {
+                        ctx.strokeStyle = `rgba(192, 38, 211, ${1 - distance / 140})`;
+                        ctx.lineWidth = 1.2;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            
+            connectParticles();
+            requestAnimationFrame(animateParticles);
+        }
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        }
+
+        // Mouse tracking
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        // Navbar scroll effect + progress bar
+        const navbar = document.getElementById('navbar');
+        const progressBar = document.getElementById('scrollProgress');
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            
+            progressBar.style.width = `${scrollPercent}%`;
+            
+            if (scrollTop > 80) {
+                navbar.classList.add('bg-zinc-950/90', 'shadow-2xl');
+            } else {
+                navbar.classList.remove('bg-zinc-950/90', 'shadow-2xl');
+            }
+        });
+
+        // Hamburger menu
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        let isOpen = false;
+
+        hamburger.addEventListener('click', () => {
+            isOpen = !isOpen;
+            
+            const bar1 = document.getElementById('bar1');
+            const bar2 = document.getElementById('bar2');
+            const bar3 = document.getElementById('bar3');
+            
+            if (isOpen) {
+                bar1.style.transform = 'rotate(45deg) translate(5px, 5px)';
+                bar3.style.transform = 'rotate(-45deg) translate(7px, -7px)';
+                bar2.style.opacity = '0';
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('flex', 'flex-col');
+            } else {
+                bar1.style.transform = 'none';
+                bar3.style.transform = 'none';
+                bar2.style.opacity = '1';
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('flex', 'flex-col');
+            }
+        });
+
+        // Close mobile menu when clicking links
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => {
+                isOpen = false;
+                document.getElementById('bar1').style.transform = 'none';
+                document.getElementById('bar3').style.transform = 'none';
+                document.getElementById('bar2').style.opacity = '1';
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Keyboard escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape" && isOpen) {
+                hamburger.click();
+            }
+        });
+
+        // Initialize everything
+        window.addEventListener('load', () => {
+            resizeCanvas();
+            animateParticles();
+            
+            // Initial navbar state
+            if (window.scrollY > 80) {
+                navbar.classList.add('bg-zinc-950/90');
+            }
+        });
+
+        window.addEventListener('resize', resizeCanvas);
+
+        // Parallax on hero name (subtle)
+        const heroName = document.getElementById('heroName');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            if (scrollY < window.innerHeight) {
+                heroName.style.transform = `translateY(${scrollY * 0.25}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
